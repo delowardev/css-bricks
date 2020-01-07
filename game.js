@@ -1,101 +1,67 @@
-"use strict"
+const Bricks = function (blocks = {}) {
+    this.blocks = blocks
+    this.display = document.querySelector('.main-display-inner')
+    this.rows = this.display.querySelectorAll('.block-row')
+    this.activeClass = 'active-block'
+}
 
-/**
- * 
- * @param {*} blocks 
- */
+Bricks.prototype.run = function (blocks = {}) {
+    this.blocks = blocks
+    this.makeFill()
+}
 
-const activeClass = 'active-block'
-
-const makeBlockEmpty = function() {
-    const blocks = document.querySelectorAll('.main-display-inner span.active-block')
-    for(let i = 0; i < blocks.length; i++){
-        blocks[i].classList.remove(activeClass)
+Bricks.prototype.makeEmpty = function () {
+    const activeBlocks = this.display.querySelectorAll('span.active-block')
+    for (let i = 0; i < activeBlocks.length; i++) {
+        activeBlocks[i].classList.remove(this.activeClass)
     }
 }
 
-const makeBlockFill = function(blocks = {}) {
-    const keys = Object.keys(blocks)
-    if (typeof blocks !== 'object' && blocks === null) {
-        return false
-    }
-    makeBlockEmpty()
-    const display = document.querySelector('.main-display-inner')
-    const rows = display.querySelectorAll('.block-row')
-    
-    for(let i = 0; i < keys.length; i++){
+Bricks.prototype.makeFill = function () {
+    this.makeEmpty()
+    const keys = Object.keys(this.blocks)
+    for (let i = 0; i < keys.length; i++) {
         const currentKey = keys[i]
         if (currentKey < 0 || currentKey > 19) {
             return false
         }
-        const currentRow = rows[currentKey]
-        const currentBlocks = blocks[currentKey]
+        const currentRow = this.rows[currentKey]
+        const currentBlocks = this.blocks[currentKey]
         const currentItems = currentRow.querySelectorAll('span')
 
-        if (Array.isArray(currentBlocks) && currentBlocks.length > 0){
-            for(let j = 0; j < currentBlocks.length; j++) {
+        if (Array.isArray(currentBlocks) && currentBlocks.length > 0) {
+            for (let j = 0; j < currentBlocks.length; j++) {
                 const currentBlock = currentBlocks[j]
                 if (currentBlock < 0 || currentBlock > 9) {
                     return
                 }
-                currentItems[currentBlock].classList.add(activeClass)
+                currentItems[currentBlock].classList.add(this.activeClass)
             }
-        }else if (currentBlocks === true){
-            for (let j = 0; j < currentItems.length; j++){
-                currentItems[j].classList.add(activeClass)
+        } else if (currentBlocks === true) {
+            for (let j = 0; j < currentItems.length; j++) {
+                currentItems[j].classList.add(this.activeClass)
             }
         }
     }
 }
 
-const makeGameOverAnimation = function() {
 
-}
+const bricks = new Bricks()
 
-const makePlane = function(move = [2, 3]) {
-
-}
-
-const fill1 = {
-    0: [0, 9],
-    1: [0, 9],
-    3: [0, 9],
-    4: [0, 9],
-    6: [0, 9],
-    7: [0, 9],
-    9: [0, 9],
-    10: [0, 9],
-    12: [0, 9],
-    13: [0, 9],
-    15: [0, 9],
-    16: [0, 9],
-    18: [0, 9],
-    19: [0, 9],
-}
-const fill2 = {
-    1: [0, 9],
-    2: [0, 9],
-    4: [0, 9],
-    5: [0, 9],
-    7: [0, 9],
-    8: [0, 9],
-    10: [0, 9],
-    11: [0, 9],
-    13: [0, 9],
-    14: [0, 9],
-    16: [0, 9],
-    17: [0, 9],
-    19: [0, 9]
-}
-
-
-let item = 1
+let item = 0
 setInterval(() => {
-    if (item === 1) {
-        makeBlockFill(fill1)
-        item = 2
-    } else {
-        makeBlockFill(fill2)
-        item = 1
+    if(item + 2 > 19) {
+        item = 0;
     }
+    let first = item
+    let second = item + 1
+    let third = item + 2
+    bricks.run({
+        [first]: [3],
+        [second]: [3],
+        [third]: [3]
+    })
+    item++
+
 }, 300)
+
