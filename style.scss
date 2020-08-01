@@ -80,10 +80,9 @@
 				padding: 6px;
 				h3{
 					margin: 0 0 5px;
-					font-size: 16px;
+					font-size: 14px;
 				}
 				.score-numbers{
-					font-size: 18px;
 					position: relative;
 					span:first-child{
 						opacity: .2;
@@ -206,8 +205,42 @@
 	}
 }
 
-.block-row span.active-block{
-	--empty-block-color: #000000;
+.main-display-inner{
+	.block-row{
+		// fill side block
+		&:nth-child(3n + 1),
+		&:nth-child(3n + 2){
+			span:last-child,
+			span:first-child{
+				--empty-block-color: #000000;
+				animation: sideblock 2s linear infinite;
+				animation-delay: 0s;
+			}
+		}
+
+		// create palne
+		&:nth-last-child(1){
+			span:nth-child(3),
+			span:nth-child(5){
+				--empty-block-color: #000000;
+			}
+		}
+
+		&:nth-last-child(4),
+		&:nth-last-child(2) {
+			span:nth-child(4){
+			--empty-block-color: #000000;
+		}
+		}
+		&:nth-last-child(3){
+			span:nth-child(3),
+			span:nth-child(4),
+			span:nth-child(5){
+				--empty-block-color: #000000;
+			}
+		}
+
+	}
 }
 
 .score-blocks .block-row:first-child span{
